@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://ctglky1artoxe"]
+
+[ext_resource type="Shader" uid="uid://cdhyp1m6o6tcl" path="res://lava_sea.gdshader" id="1_2jas5"]
+[ext_resource type="SphereMesh" uid="uid://b35ovmvjit5gc" path="res://bubble_mesh.tres" id="2_8lvy3"]
+[ext_resource type="Script" uid="uid://c1aoo5yels6v" path="res://bubble_spawner.gd" id="2_n51mc"]
+
+[sub_resource type="Environment" id="Environment_2jas5"]
+glow_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_2jas5"]
+offsets = PackedFloat32Array(0.12751678, 0.9395973, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8lvy3"]
+noise_type = 2
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n51mc"]
+noise = SubResource("FastNoiseLite_8lvy3")
+color_ramp = SubResource("Gradient_2jas5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lbj6w"]
+render_priority = 0
+shader = ExtResource("1_2jas5")
+shader_parameter/main_noise = SubResource("NoiseTexture2D_n51mc")
+shader_parameter/emission_strength = 10.0
+
+[sub_resource type="MultiMesh" id="MultiMesh_lbj6w"]
+transform_format = 1
+instance_count = 10
+mesh = ExtResource("2_8lvy3")
+buffer = PackedFloat32Array(0.36417687, 0, 0, 0.22424448, 0, 0.36417687, 0, 1.0472038, 0, 0, 0.36417687, 0, 0.29235163, 0, 0, -0.90128815, 0, 0.29235163, 0, 1.20256, 0, 0, 0.29235163, 0, 0.33583122, 0, 0, 0.9007497, 0, 0.33583122, 0, -1.1689789, 0, 0, 0.33583122, 0, 0.2601328, 0, 0, 0.8284383, 0, 0.2601328, 0, 1.3264246, 0, 0, 0.2601328, 0, 0.16639058, 0, 0, -0.0030198097, 0, 0.16639058, 0, -1.199498, 0, 0, 0.16639058, 0, 0.95278955, 0, 0, 0.4246211, 0, 0.95278955, 0, 0.84556556, 0, 0, 0.95278955, 0, 0.40784788, 0, 0, -0.99076307, 0, 0.40784788, 0, -0.62886095, 0, 0, 0.40784788, 0, 0.7114899, 0, 0, -0.1805129, 0, 0.7114899, 0, -0.17418051, 0, 0, 0.7114899, 0, 0.6644746, 0, 0, -0.9431832, 0, 0.6644746, 0, 0.73346233, 0, 0, 0.6644746, 0, 0.73058873, 0, 0, -1.0162631, 0, 0.73058873, 0, -1.4737182, 0, 0, 0.73058873, 0)
+
+[node name="Node3D" type="Node3D" unique_id=367666733]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1878340265]
+environment = SubResource("Environment_2jas5")
+
+[node name="LavaGround" type="CSGPolygon3D" parent="." unique_id=1357946199]
+transform = Transform3D(0.9999954, -0.0030221865, -1.2544257e-07, 1.1801072e-07, -2.4473093e-06, 1, -0.0030221865, -0.9999954, -2.4469393e-06, 0, 1, 0)
+polygon = PackedVector2Array(-2, -2, -2, 2, 2, 2, 2, -2)
+depth = 0.01
+material = SubResource("ShaderMaterial_lbj6w")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="LavaGround" unique_id=618823013]
+transform = Transform3D(1.0000002, 0, -2.88658e-14, 0, 1.0000002, 0, -1.5099033e-14, 4.5474735e-13, 1, 0, 0, 0)
+multimesh = SubResource("MultiMesh_lbj6w")
+script = ExtResource("2_n51mc")
+bubble_amount = 10
+random_start_time_per_bubble = 1.0
+random_end_time_per_bubble = 3.0
+random_start_spawn_position = Vector3(-1.5, -1.5, 0)
+random_end_spawn_position = Vector3(1.5, 1.5, 0)

@@ -1,0 +1,25 @@
+[gd_resource type="SphereMesh" format=3 uid="uid://b35ovmvjit5gc"]
+
+[ext_resource type="Shader" uid="uid://fnehuy3bgsag" path="res://bubble.gdshader" id="1_mhdxq"]
+
+[sub_resource type="Gradient" id="Gradient_8lvy3"]
+offsets = PackedFloat32Array(0, 0.062068965, 0.74822694, 0.88255036)
+colors = PackedColorArray(0.18431373, 0, 0.019607844, 1, 0.97239166, 0.64849925, 0, 1, 0.52037406, 0.029768929, 4.813075e-08, 1, 0.18598023, 1.3085548e-07, 0.01827645, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ei00m"]
+gradient = SubResource("Gradient_8lvy3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n51mc"]
+render_priority = 0
+shader = ExtResource("1_mhdxq")
+shader_parameter/color_ramp = SubResource("GradientTexture2D_ei00m")
+shader_parameter/fresnel_amount = 0.345
+shader_parameter/emission_strength = 10.0
+shader_parameter/time = 6281814
+
+[resource]
+material = SubResource("ShaderMaterial_n51mc")
+radius = 0.25
+height = 0.5
+radial_segments = 8
+rings = 8
