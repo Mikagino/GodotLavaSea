@@ -1,17 +1,23 @@
 shader_type spatial;
-render_mode shadows_disabled, unshaded, cull_back;
+render_mode shadows_disabled, unshaded, cull_disabled, alpha_to_coverage;
 
 uniform sampler2D color_ramp;
 uniform float fresnel_amount = 1.0;
 uniform float emission_strength = 5.0;
+uniform float pop_to_end_time_factor = 0.7;
 
-instance uniform int start_time;
+instance uniform float start_time;
 uniform float time;
+varying float end_time;
+varying float current_lifetime;
 
+varying vec3 vertex_pos;
 
 void vertex() {
-	float lifetime = (float(time) - INSTANCE_CUSTOM.r);
-	VERTEX *= (0.5 + lifetime);
+	current_lifetime = (float(time) - INSTANCE_CUSTOM.r);
+	VERTEX *= pow(current_lifetime, 0.5);
+	end_time = INSTANCE_CUSTOM.g;
+	vertex_pos = VERTEX;
 }
 
 
@@ -24,6 +30,8 @@ void fragment() {
 	ALBEDO = texture(color_ramp, vec2(fresnel(fresnel_amount, NORMAL, VIEW), 0.0)).rgb;
 	EMISSION = ALBEDO * emission_strength;
 	ALPHA = 0.8;
+	float pop_to_start_time_factor = 1.0 - pop_to_end_time_factor;
+	ALPHA = normalize(-(vertex_pos.z + current_lifetime - pop_to_end_time_factor * end_time)) * 0.8;
 }
 
 

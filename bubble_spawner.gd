@@ -36,7 +36,7 @@ func _process(_delta: float) -> void:
 	shader_material.set_shader_parameter("time", Time.get_ticks_msec() / 1000.0)
 	var shader_time : float = shader_material.get_shader_parameter("time")
 	var shader_start_time : float = multimesh.get_instance_custom_data(0).r
-	printt(shader_time, shader_start_time, shader_time - shader_start_time)
+	printt(shader_time, shader_start_time, shader_time - shader_start_time, timers[0].wait_time)
 	pass
 
 
@@ -66,7 +66,9 @@ func instantiate_bubble(index: int):
 	var random_scale := get_random_size(random_min_scale, random_max_scale)
 	var random_basis := Basis().scaled(random_scale)
 	
-	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, 0, 0, 0)
+	## [start time], [max lifetime]
+	## TODO: meby calc start time here?
+	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, timers[index].wait_time, 0, 0)
 	multimesh.set_instance_custom_data(index, start_time_color)
 	multimesh.set_instance_transform(index, Transform3D(random_basis, random_position))
 
