@@ -30,8 +30,6 @@ float fresnel(float amount, vec3 normal, vec3 view) {
 void fragment() {
 	ALBEDO = texture(color_ramp, vec2(fresnel(fresnel_amount, NORMAL, VIEW), 0.0)).rgb;
 	EMISSION = ALBEDO * emission_strength;
-	ALPHA = 0.8;
-	float pop_to_start_time_factor = 1.0 - pop_to_end_time_factor;
 	ALPHA = normalize(-(vertex_pos.z + current_lifetime - pop_to_end_time_factor * end_time)) * 0.8;
 }
 
