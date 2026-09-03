@@ -16,4 +16,4 @@ shader_parameter/color_ramp = SubResource("GradientTexture2D_ei00m")
 shader_parameter/fresnel_amount = 0.345
 shader_parameter/emission_strength = 10.0
 shader_parameter/pop_to_end_time_factor = 0.7
-shader_parameter/time = 15705.343
+shader_parameter/time = 16925.082

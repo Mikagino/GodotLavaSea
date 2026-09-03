@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bos4vivgfkbkf"]
-
-[ext_resource type="SphereMesh" uid="uid://b35ovmvjit5gc" path="res://bubble_mesh.tres" id="1_666gx"]
-
-[node name="BubbleMesh" type="MeshInstance3D" unique_id=1060821807]
-mesh = ExtResource("1_666gx")
