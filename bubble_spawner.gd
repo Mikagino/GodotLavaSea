@@ -22,6 +22,9 @@ var random_number_generator := RandomNumberGenerator.new()
 var shader_material : ShaderMaterial
 
 func _ready() -> void:
+	multimesh.instance_count = 0
+	multimesh.use_custom_data = true
+	multimesh.use_colors = true
 	multimesh.instance_count = bubble_amount
 	shader_material = (multimesh.mesh.surface_get_material(0) as ShaderMaterial)
 	for i in range(bubble_amount):
@@ -30,7 +33,10 @@ func _ready() -> void:
 		
 		
 func _process(_delta: float) -> void:
-	#shader_material.set_shader_parameter("time", Time.get_ticks_msec())
+	shader_material.set_shader_parameter("time", Time.get_ticks_msec() / 1000.0)
+	var shader_time : float = shader_material.get_shader_parameter("time")
+	var shader_start_time : float = multimesh.get_instance_custom_data(0).r
+	printt(shader_time, shader_start_time, shader_time - shader_start_time)
 	pass
 
 
@@ -59,7 +65,9 @@ func instantiate_bubble(index: int):
 	var random_position := get_random_position(random_start_spawn_position, random_end_spawn_position)
 	var random_scale := get_random_size(random_min_scale, random_max_scale)
 	var random_basis := Basis().scaled(random_scale)
-	#multimesh.
+	
+	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, 0, 0, 0)
+	multimesh.set_instance_custom_data(index, start_time_color)
 	multimesh.set_instance_transform(index, Transform3D(random_basis, random_position))
 
 

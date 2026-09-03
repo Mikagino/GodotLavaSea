@@ -6,12 +6,12 @@ uniform float fresnel_amount = 1.0;
 uniform float emission_strength = 5.0;
 
 instance uniform int start_time;
-uniform int time;
+uniform float time;
+
 
 void vertex() {
-	//POSITION = vec4(float(time - start_time));
-	//POSITION = MODEL_MATRIX * 2.0;
-	// Called for every vertex the material is visible on.
+	float lifetime = (float(time) - INSTANCE_CUSTOM.r);
+	VERTEX *= (0.5 + lifetime);
 }
 
 
