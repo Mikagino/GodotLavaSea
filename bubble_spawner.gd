@@ -13,10 +13,11 @@ class_name BubbleSpawner
 @export var random_end_spawn_position: Vector3 = Vector3.ONE
 @export var random_min_scale: float = 0.1
 @export var random_max_scale: float = 1
+@export var bubbles_squared_poison_minimum: float = 2
+@export var poison_iterations: int = 5
 
 
 var timers: Array[Timer] = []
-var bubbles: Array[Node3D] = []
 
 var random_number_generator := RandomNumberGenerator.new()
 var shader_material : ShaderMaterial
@@ -34,9 +35,9 @@ func _ready() -> void:
 		
 func _process(_delta: float) -> void:
 	shader_material.set_shader_parameter("time", Time.get_ticks_msec() / 1000.0)
-	var shader_time : float = shader_material.get_shader_parameter("time")
-	var shader_start_time : float = multimesh.get_instance_custom_data(0).r
-	printt(shader_time, shader_start_time, shader_time - shader_start_time, timers[0].wait_time)
+	#var shader_time : float = shader_material.get_shader_parameter("time")
+	#var shader_start_time : float = multimesh.get_instance_custom_data(0).r
+	#printt(shader_time, shader_start_time, shader_time - shader_start_time, timers[0].wait_time)
 	pass
 
 
@@ -62,16 +63,27 @@ func randomize_time(timer: Timer):
 
 func instantiate_bubble(index: int):
 	# TODO: randomize only inside the polygon mesh
-	var random_position := get_random_position(random_start_spawn_position, random_end_spawn_position)
+	var new_transform : Transform3D = Transform3D()
 	var random_scale := get_random_size(random_min_scale, random_max_scale)
-	var random_basis := Basis().scaled(random_scale)
+	new_transform.basis = Basis().scaled(random_scale)
 	
+	for i in range(poison_iterations):
+		if(i == 0 || bubble_position_occupied_approx(new_transform)):
+			new_transform.origin = get_random_position(random_start_spawn_position, random_end_spawn_position)
+			
+	
+	## TODO: pass color of ground below
 	## [start time], [max lifetime]
-	## TODO: meby calc start time here?
 	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, timers[index].wait_time, 0, 0)
 	multimesh.set_instance_custom_data(index, start_time_color)
-	multimesh.set_instance_transform(index, Transform3D(random_basis, random_position))
+	multimesh.set_instance_transform(index, new_transform)
 
+
+func bubble_position_occupied_approx(new_transform: Transform3D) -> bool:
+	for i in range(multimesh.instance_count):
+		if multimesh.get_instance_transform(i).origin.distance_squared_to(new_transform.origin) < bubbles_squared_poison_minimum:
+			return true
+	return false
 
 func get_random_position(start: Vector3, end: Vector3) -> Vector3:
 	return Vector3(
@@ -79,8 +91,8 @@ func get_random_position(start: Vector3, end: Vector3) -> Vector3:
 		random_number_generator.randf_range(start.y, end.y),
 		random_number_generator.randf_range(start.z, end.z),
 	)
-
-
+	
+	
 func get_random_size(start: float, end: float) -> Vector3:
 	return Vector3.ONE * random_number_generator.randf_range(start, end)
 	

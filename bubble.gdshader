@@ -13,8 +13,9 @@ varying float current_lifetime;
 
 varying vec3 vertex_pos;
 
+
 void vertex() {
-	current_lifetime = (float(time) - INSTANCE_CUSTOM.r);
+	current_lifetime = float(time) - INSTANCE_CUSTOM.r;
 	VERTEX *= pow(current_lifetime, 0.5);
 	end_time = INSTANCE_CUSTOM.g;
 	vertex_pos = VERTEX;
