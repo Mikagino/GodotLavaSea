@@ -8,12 +8,35 @@ colors = PackedColorArray(0.18431373, 0, 0.019607844, 1, 0.97239166, 0.64849925,
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ei00m"]
 gradient = SubResource("Gradient_8lvy3")
+width = 32
+height = 1
+
+[sub_resource type="Gradient" id="Gradient_2jas5"]
+offsets = PackedFloat32Array(0.12751678, 0.9395973, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8ypta"]
+noise_type = 2
+fractal_type = 2
+fractal_octaves = 3
+fractal_lacunarity = 2.31
+fractal_gain = 0.355
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_elsb8"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_8ypta")
+color_ramp = SubResource("Gradient_2jas5")
+seamless = true
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_8ypta")
 shader_parameter/color_ramp = SubResource("GradientTexture2D_ei00m")
-shader_parameter/fresnel_amount = 0.345
+shader_parameter/fresnel_amount = 0.35
 shader_parameter/emission_strength = 10.0
 shader_parameter/pop_to_end_time_factor = 0.7
-shader_parameter/time = 16925.082
+shader_parameter/global_tint_noise = SubResource("NoiseTexture2D_elsb8")
+shader_parameter/global_tint_noise_scale = 0.4
+shader_parameter/transparency = 0.8
+shader_parameter/time = 272.672
