@@ -62,8 +62,8 @@ mono_crash.*.json
 mono_crash.*
 
 # Build results
-[Bb]uild[s]/*
-![Bb]uild[s]/.gitkeep
+[Bb]uilds
+![Bb]uilds/.gitkeep
 # [Dd]ebug/
 # [Dd]ebugPublic/
 # [Rr]elease/
