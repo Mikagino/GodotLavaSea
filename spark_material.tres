@@ -1,0 +1,18 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c1r74u3c0kun7"]
+
+[sub_resource type="Gradient" id="Gradient_bxbr8"]
+colors = PackedColorArray(0.99545485, 0.7830867, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bxbr8"]
+gradient = SubResource("Gradient_bxbr8")
+width = 8
+height = 8
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[resource]
+albedo_texture = SubResource("GradientTexture2D_bxbr8")
+emission_enabled = true
+emission_energy_multiplier = 10.0
+emission_texture = SubResource("GradientTexture2D_bxbr8")
+billboard_mode = 1

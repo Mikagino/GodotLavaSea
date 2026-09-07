@@ -15,10 +15,6 @@ run/main_scene="uid://ctglky1artoxe"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-Profily="*uid://qmnu1ehm866e"
-
 [display]
 
 window/stretch/mode="canvas_items"
@@ -27,10 +23,6 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="GodotLavaSea"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/profily/plugin.cfg")
 
 [physics]
 
