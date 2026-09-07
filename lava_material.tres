@@ -3,8 +3,8 @@
 [ext_resource type="Shader" uid="uid://cdhyp1m6o6tcl" path="res://lava_sea.gdshader" id="1_je36y"]
 
 [sub_resource type="Gradient" id="Gradient_2jas5"]
-offsets = PackedFloat32Array(0.12751678, 0.9395973, 1)
-colors = PackedColorArray(1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
+offsets = PackedFloat32Array(0.16608997, 0.24913494, 0.9100346, 1)
+colors = PackedColorArray(0.08925157, 0.023352293, 0.005513441, 1, 1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_8lvy3"]
 noise_type = 2
@@ -19,8 +19,8 @@ color_ramp = SubResource("Gradient_2jas5")
 seamless = true
 
 [sub_resource type="Gradient" id="Gradient_8lvy3"]
-offsets = PackedFloat32Array(0.12751678, 0.9395973, 1)
-colors = PackedColorArray(1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
+offsets = PackedFloat32Array(0.20415226, 0.3702422, 0.9395973, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1, 0.7980849, 0.51869285, 0.038180776, 1, 0.99545366, 0.69927007, 0, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wcwec"]
 noise_type = 3

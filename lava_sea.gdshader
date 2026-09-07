@@ -54,9 +54,11 @@ vec3 linear_light(vec3 base, vec3 blend, float opacity) {
 void fragment() {
 	float secondary_time = TIME * 0.01;
 	vec3 final_position = linear_light(position * main_noise_scale, texture(wave_noise, vec2(position.x - secondary_time, position.y - secondary_time) * wave_texture_scale).rgb, wave_strength);
-	ALBEDO = texture(main_noise, final_position.xy + TIME * move_speed).rgb;
+	vec3 main_color = texture(main_noise, final_position.xy + TIME * move_speed).rgb;
+	ALBEDO = main_color;
 	vec3 secondary_color = texture(secondary_noise, secondary_noise_scale * vec2(position.x - secondary_time, position.y + secondary_time)).rgb * (abs(pow(sin(TIME * 0.5), 3.0)) / 2.0 + 0.1);
 	ALBEDO = mix(ALBEDO, secondary_color, 0.5);
+	ALBEDO = ALBEDO * main_color.r;
 	EMISSION = ALBEDO * emission_strength * (1.0 - ALBEDO.r);
 }
 
