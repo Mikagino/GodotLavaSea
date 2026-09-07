@@ -17,6 +17,7 @@ class_name BubbleSpawner
 @export var lava_polygon: CSGPolygon3D
 
 var shader_material : ShaderMaterial
+var camera : Camera3D
 
 signal bubble_popped(transform: Transform3D)
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 	multimesh.use_colors = true
 	multimesh.instance_count = bubble_amount
 	shader_material = (multimesh.mesh.surface_get_material(0) as ShaderMaterial)
+	camera = get_viewport().get_camera_3d()
 	PolygonRandomPointGenerator._init(lava_polygon.polygon)
 	for i in range(bubble_amount):
 		timer_array.create_random_timer()
@@ -50,9 +52,12 @@ func _process(_delta: float) -> void:
 
 ## Calculate random position, scale and set at the specified multimesh index
 func instantiate_bubble(index: int):
+	var new_transform : Transform3D = Transform3D.IDENTITY
+	if check_hide_outside_frustum(index, new_transform):
+		return
+		
 	bubble_popped.emit(multimesh.get_instance_transform(index))
 	# TODO: randomize only inside the polygon mesh
-	var new_transform : Transform3D = Transform3D()
 	var random_scale := RandomNumberUtil.get_random_uniform_vector(random_min_scale, random_max_scale)
 	new_transform.basis = Basis().scaled(random_scale)
 	
@@ -61,8 +66,8 @@ func instantiate_bubble(index: int):
 			new_transform.origin = get_random_position()
 			
 	## TODO: pass color of ground below
-	## [start time], [max lifetime]
-	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, timer_array.timers[index].wait_time, 0, 0)
+	## [start time], [max lifetime], [enabled]
+	var start_time_color := Color(Time.get_ticks_msec() / 1000.0, timer_array.timers[index].wait_time, 1.0, 0)
 	multimesh.set_instance_custom_data(index, start_time_color)
 	multimesh.set_instance_transform(index, new_transform)
 
@@ -80,3 +85,12 @@ func get_random_position() -> Vector3:
 	#return RandomNumberUtil.get_random_vector(random_start_spawn_position, random_end_spawn_position)
 	var result2d : Vector2 = PolygonRandomPointGenerator.get_random_point()
 	return Vector3(result2d.x, result2d.y, global_position.y)
+	
+	
+func check_hide_outside_frustum(index: int, new_transform: Transform3D) -> bool:
+	if camera.is_position_in_frustum(multimesh.get_instance_transform(index).origin + global_position):
+		return false
+	new_transform = new_transform.scaled(Vector3.ZERO)
+	multimesh.set_instance_transform(index, new_transform)
+	multimesh.set_instance_custom_data(index, Color(0,0,0))
+	return true

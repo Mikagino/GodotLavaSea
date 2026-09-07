@@ -16,15 +16,19 @@ varying float current_lifetime;
 varying vec3 vertex_pos;
 varying vec3 global_pos;
 varying float instance_id;
+varying float enabled;
 
 
 void vertex() {
-	current_lifetime = float(time) - INSTANCE_CUSTOM.r;
-	VERTEX *= pow(current_lifetime, 0.5);
-	end_time = INSTANCE_CUSTOM.g;
-	vertex_pos = VERTEX;
-	global_pos = MODEL_MATRIX[3].xyz;
-	instance_id = float(INSTANCE_ID);
+	enabled = INSTANCE_CUSTOM.b;
+	if(INSTANCE_CUSTOM.b != 0.0){
+		current_lifetime = float(time) - INSTANCE_CUSTOM.r;
+		VERTEX *= pow(current_lifetime, 0.5);
+		end_time = INSTANCE_CUSTOM.g;
+		vertex_pos = VERTEX;
+		global_pos = MODEL_MATRIX[3].xyz;
+		instance_id = float(INSTANCE_ID);
+	}
 }
 
 
@@ -34,10 +38,12 @@ float fresnel(float amount, vec3 normal, vec3 view) {
 
 
 void fragment() {
-	ALBEDO = texture(color_ramp, vec2(fresnel(fresnel_amount, NORMAL, VIEW), 0.0)).rgb;
-	ALBEDO = mix(ALBEDO, texture(global_tint_noise, global_pos.xy * global_tint_noise_scale).rgb, 0.5);
-	EMISSION = ALBEDO * emission_strength;
-	ALPHA = normalize(-(vertex_pos.z + current_lifetime - pop_to_end_time_factor * end_time)) * transparency;
+	if(enabled != 0.0) {
+		ALBEDO = texture(color_ramp, vec2(fresnel(fresnel_amount, NORMAL, VIEW), 0.0)).rgb;
+		ALBEDO = mix(ALBEDO, texture(global_tint_noise, global_pos.xy * global_tint_noise_scale).rgb, 0.5);
+		EMISSION = ALBEDO * emission_strength;
+		ALPHA = normalize(-(vertex_pos.z + current_lifetime - pop_to_end_time_factor * end_time)) * transparency;
+	}
 }
 
 
