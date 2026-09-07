@@ -33,6 +33,10 @@ func _ready() -> void:
 		timers.back().timeout.connect(instantiate_bubble.bind(i))
 		
 		
+func _exit_tree() -> void:
+	multimesh.instance_count = 0
+	
+		
 func _process(_delta: float) -> void:
 	shader_material.set_shader_parameter("time", Time.get_ticks_msec() / 1000.0)
 	#var shader_time : float = shader_material.get_shader_parameter("time")
