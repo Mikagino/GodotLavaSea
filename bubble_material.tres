@@ -39,4 +39,4 @@ shader_parameter/pop_to_end_time_factor = 0.7
 shader_parameter/global_tint_noise = SubResource("NoiseTexture2D_elsb8")
 shader_parameter/global_tint_noise_scale = 0.4
 shader_parameter/transparency = 0.8
-shader_parameter/time = 2076.446
+shader_parameter/time = 2379.947

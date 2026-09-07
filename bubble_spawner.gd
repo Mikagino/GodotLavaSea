@@ -15,8 +15,10 @@ class_name BubbleSpawner
 @export var poison_iterations: int = 5
 @export var timer_array: TimerArray
 
-var random_number_generator := RandomNumberGenerator.new()
 var shader_material : ShaderMaterial
+
+signal bubble_popped(transform: Transform3D)
+
 
 func _ready() -> void:
 	multimesh.instance_count = 0
@@ -45,14 +47,15 @@ func _process(_delta: float) -> void:
 
 
 func instantiate_bubble(index: int):
+	bubble_popped.emit(multimesh.get_instance_transform(index))
 	# TODO: randomize only inside the polygon mesh
 	var new_transform : Transform3D = Transform3D()
-	var random_scale := get_random_size(random_min_scale, random_max_scale)
+	var random_scale := RandomNumberUtil.get_random_uniform_vector(random_min_scale, random_max_scale)
 	new_transform.basis = Basis().scaled(random_scale)
 	
 	for i in range(poison_iterations):
 		if(i == 0 || bubble_position_occupied_approx(new_transform)):
-			new_transform.origin = get_random_position(random_start_spawn_position, random_end_spawn_position)
+			new_transform.origin = RandomNumberUtil.get_random_vector(random_start_spawn_position, random_end_spawn_position)
 			
 	
 	## TODO: pass color of ground below
@@ -67,16 +70,4 @@ func bubble_position_occupied_approx(new_transform: Transform3D) -> bool:
 		if multimesh.get_instance_transform(i).origin.distance_squared_to(new_transform.origin) < bubbles_squared_poison_minimum:
 			return true
 	return false
-
-func get_random_position(start: Vector3, end: Vector3) -> Vector3:
-	return Vector3(
-		random_number_generator.randf_range(start.x, end.x),
-		random_number_generator.randf_range(start.y, end.y),
-		random_number_generator.randf_range(start.z, end.z),
-	)
-	
-	
-func get_random_size(start: float, end: float) -> Vector3:
-	return Vector3.ONE * random_number_generator.randf_range(start, end)
-	
 	
