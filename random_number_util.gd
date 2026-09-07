@@ -2,7 +2,7 @@
 extends Node
 class_name RandomNumberUtil
 
-static var random_number_generator : RandomNumberGenerator
+static var random_number_generator : RandomNumberGenerator = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
@@ -10,6 +10,7 @@ func _ready() -> void:
 	
 
 static func get_random_vector(start: Vector3, end: Vector3) -> Vector3:
+	check_random_number_generator()
 	return Vector3(
 		random_number_generator.randf_range(start.x, end.x),
 		random_number_generator.randf_range(start.y, end.y),
@@ -18,4 +19,11 @@ static func get_random_vector(start: Vector3, end: Vector3) -> Vector3:
 
 
 static func get_random_uniform_vector(start: float, end: float) -> Vector3:
+	check_random_number_generator()
 	return Vector3.ONE * random_number_generator.randf_range(start, end)
+	
+
+static func check_random_number_generator():
+	if not random_number_generator:
+		random_number_generator = RandomNumberGenerator.new()
+	
